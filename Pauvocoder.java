@@ -62,32 +62,29 @@ public class Pauvocoder {
         int compteur = 0;
         double saut = 0;
         double tailleinputWav = inputWav.length;
+        double[] newinputWav = new double[1];
 
     if (freqScale > 1){
         double enleve = (freqScale - 1) / freqScale;
-        double[] newinputWav = new double[(int)(tailleinputWav-enleve)];
+        newinputWav = new double[(int)(tailleinputWav-enleve)];
         saut = inputWav.length/enleve;
 
         for (int i = 0; i < newinputWav.length; i++){
-            if (i /compteur != 0){
+            if (i /saut != 1){
                 newinputWav[i] = inputWav[i];
-                compteur++;
-            }else{
-                compteur = 0;
+                
             }
         }
     }else if (freqScale < 1){
         double ajoute = (1 - freqScale) / freqScale;
-        double[] newinputWav = new double[(int)(tailleinputWav+ajoute)] ;
+        newinputWav = new double[(int)(tailleinputWav+ajoute)] ;
         saut = inputWav.length/ajoute;
 
         for (int i = 0; i < newinputWav.length; i++){
-            if (i /compteur != 0){
+            if (i /saut != 1){
                 newinputWav[i] = inputWav[i];
-                compteur++;
 
             }else{
-                compteur = 0;
                 double avant = inputWav[i-1];
                 double apres = inputWav[i+1];
                 newinputWav[i] = (avant + apres) / 2;
