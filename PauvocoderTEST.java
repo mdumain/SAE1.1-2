@@ -1,7 +1,7 @@
 
 import static java.lang.System.exit;
 
-public class Pauvocoder {
+public class PauvocoderTEST {
 
     // Processing SEQUENCE size (100 msec with 44100Hz samplerate)
     final static int SEQUENCE = StdAudio.SAMPLE_RATE/10;
