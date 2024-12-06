@@ -59,7 +59,6 @@ public class Pauvocoder {
      * @return resampled wav
      */
     public static double[] resample(double[] inputWav, double freqScale) {
-        int compteur = 0;
         double saut = 0;
         double tailleinputWav = inputWav.length;
         double[] newinputWav = new double[1];
@@ -103,7 +102,23 @@ public class Pauvocoder {
      * @return dilated wav
      */
     public static double[] vocodeSimple(double[] inputWav, double dilatation) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        double tailleinputWav = inputWav.length;
+        double tailledilate = 0;
+        double[] dilatedWav = new double[1];
+        double seq = tailleinputWav/20;
+        double saut = seq*dilatation;
+
+        if (dilatation>1){
+            //comprime le signal
+            newinputWav = new double[(int)(tailleinputWav-)] ;
+
+        } else if (dilatation<1){
+            //dilate le signal
+            tailledilate = tailleinputWav/dilatation;
+
+        }
+
+
     }
 
     /**
@@ -142,7 +157,8 @@ public class Pauvocoder {
      * @return wav with echo
      */
     public static double[] echo(double[] wav, double delay, double gain) {
-        throw new UnsupportedOperationException("Not implemented yet");
+
+
     }
 
     /**
