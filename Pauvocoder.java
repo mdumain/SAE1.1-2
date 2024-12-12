@@ -59,40 +59,33 @@ public class Pauvocoder {
      * @return resampled wav
      */
     public static double[] resample(double[] inputWav, double freqScale) {
-        double saut = 0;
-        double tailleinputWav = inputWav.length;
-        double[] newinputWav = new double[1];
-
-    if (freqScale > 1){
-        double enleve = (freqScale - 1) / freqScale;
-        newinputWav = new double[(int)(tailleinputWav-enleve)];
-        saut = inputWav.length/enleve;
-
-        for (int i = 0; i < newinputWav.length; i++){
-            if (i /saut != 1){
-                newinputWav[i] = inputWav[i];
-                
-            }
+        if (inputWav == null || inputWav.length == 0) {
+            throw new IllegalArgumentException("Le tableau d'entrée n'est pas valide'.");
         }
-    }else if (freqScale < 1){
-        double ajoute = (1 - freqScale) / freqScale;
-        newinputWav = new double[(int)(tailleinputWav+ajoute)] ;
-        saut = inputWav.length/ajoute;
 
-        for (int i = 0; i < newinputWav.length; i++){
-            if (i /saut != 1){
-                newinputWav[i] = inputWav[i];
+        if (freqScale <= 0) {
+            throw new IllegalArgumentException("Le facteur de dilatation n'est pas valide.");
+        }
 
-            }else{
-                double avant = inputWav[i-1];
-                double apres = inputWav[i+1];
-                newinputWav[i] = (avant + apres) / 2;
+        freqScale = 1.0 / freqScale;
+
+        int newLength = (int) (inputWav.length * freqScale);
+
+        double[] output = new double[newLength];
+
+        for (int i = 0; i < newLength; i++) {
+            int indice = (int) (i / freqScale);
+
+            if (indice >= inputWav.length) {
+                indice = inputWav.length - 1;
             }
+
+            output[i] = inputWav[indice];
         }
 
 
-     }
-    return newinputWav;
+
+        return output;
     }
 
     /**
@@ -101,25 +94,32 @@ public class Pauvocoder {
      * @param dilatation factor
      * @return dilated wav
      */
-    public static double[] vocodeSimple(double[] inputWav, double dilatation) {
-        double tailleinputWav = inputWav.length;
-        double tailledilate = 0;
-        double[] dilatedWav = new double[1];
-        double seq = tailleinputWav/20;
-        double saut = seq*dilatation;
+public static double[] vocodeSimple(double[] inputWav, double dilatation) {
+    int inputLength = inputWav.length;
+    int newlength = (int) (inputLength / dilatation);
+    double[] outputWav = new double[newlength];
 
-        if (dilatation>1){
-            //comprime le signal
-            newinputWav = new double[(int)(tailleinputWav-)] ;
+    int compteur = 0; // Index pour parcourir l'entrée
+    int newcompteur = 0; // Index pour remplir la sortie
 
-        } else if (dilatation<1){
-            //dilate le signal
-            tailledilate = tailleinputWav/dilatation;
-
+    while (newcompteur < newlength) {
+        // Copie les échantillons du segment courant
+        for (int i = 0; i < SEQUENCE && newcompteur < newlength; i++) {
+            if (compteur + i < inputLength) {
+                outputWav[newcompteur] = inputWav[compteur + i];
+            } else {
+                outputWav[newcompteur] = 0.0; // Zéro padding si on dépasse les limites
+            }
+            newcompteur++;
         }
 
-
+        // Avance dans l'entrée en fonction du facteur de fréquence
+        compteur += (int) (SEQUENCE * dilatation);
     }
+
+    return outputWav;
+}
+
 
     /**
      * Simple dilatation, with overlapping
@@ -157,7 +157,7 @@ public class Pauvocoder {
      * @return wav with echo
      */
     public static double[] echo(double[] wav, double delay, double gain) {
-
+        throw new UnsupportedOperationException("Not implemented yet");
 
     }
 
